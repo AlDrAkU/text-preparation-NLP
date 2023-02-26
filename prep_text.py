@@ -1,7 +1,14 @@
+import nltk
 from nltk.tokenize import sent_tokenize,TreebankWordTokenizer
+from nltk.corpus import stopwords
+from string import punctuation
+nltk.download("punkt")
+nltk.download("stopwords")
 class PrepareText:
     def __init__(self,text) :
         self.text = text
+        self.punct = punctuation
+        self.stopw = stopwords.words("english")
         
     def lowercaseText(self):
         return str.lower(self.text)
@@ -17,18 +24,17 @@ class PrepareText:
     def removePunctuation(self,join=False):
         if not isinstance(self.text,list):
             self.text = self.tokenizeToWords()
-        import string
-        punct = string.punctuation
+
         if join == False:
 
-            return [t for t in self.text if t not in punct]
+            return [t for t in self.text if t not in self.punct]
         else:
-            return " ".join([t for t in self.text if t not in punct])
+            return " ".join([t for t in self.text if t not in self.punct])
     def removeStopWords(self):
-        from nltk.corpus import stopwords
+
         words = self.tokenizeToWords()
-        stopw = stopwords.words("english")
-        output = [w for w in words if w not in stopw ]
+
+        output = [w for w in words if w not in self.stopw ]
         return output
     def removeWhitespaces(self):
         return " ".join(self.text.split())
